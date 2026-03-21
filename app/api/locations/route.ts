@@ -32,7 +32,7 @@ export async function GET(request: Request) {
   const supabase = getSupabase()
 
   let query = supabase.from('locations').select('*').eq('status', 'approved')
-  if (activity) query = query.contains('activities', [activity])
+  if (activity) query = query.contains('activities', JSON.stringify([activity]))
 
   const { data, error } = await query
   if (error) return NextResponse.json([], { status: 500 })
