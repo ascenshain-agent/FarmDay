@@ -30,12 +30,6 @@ export default function Map({ locations }: MapProps) {
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map)
-
-      locations.forEach((loc) => {
-        L.marker([loc.latitude, loc.longitude])
-          .addTo(map)
-          .bindPopup(`<strong>${loc.name}</strong><br/>${loc.address}`)
-      })
     })
 
     return () => {
@@ -45,16 +39,19 @@ export default function Map({ locations }: MapProps) {
   }, [])
 
   // Update markers when locations change
+  const markersRef = useRef<import('leaflet').Marker[]>([])
+
   useEffect(() => {
     const map = mapInstanceRef.current
     if (!map) return
 
     import('leaflet').then((L) => {
-      locations.forEach((loc) => {
+      markersRef.current.forEach((m) => m.remove())
+      markersRef.current = locations.map((loc) =>
         L.marker([loc.latitude, loc.longitude])
           .addTo(map)
           .bindPopup(`<strong>${loc.name}</strong><br/>${loc.address}`)
-      })
+      )
     })
   }, [locations])
 

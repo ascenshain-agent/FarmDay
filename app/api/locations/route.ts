@@ -11,8 +11,8 @@ export async function GET(request: Request) {
   if (activity) query = query.contains('activities', [activity])
 
   const { data, error } = await query
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json(data)
+  if (error) return NextResponse.json([], { status: 500 })
+  return NextResponse.json(data ?? [])
 }
 
 export async function POST(request: Request) {
