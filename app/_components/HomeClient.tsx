@@ -6,7 +6,7 @@ import Image from 'next/image'
 import MapWrapper from './MapWrapper'
 import type { Location, ActivityType } from '@/lib/types'
 
-const ACTIVITIES: ActivityType[] = ['u-pick', 'farm fun', 'market', 'events']
+const ACTIVITIES: ActivityType[] = ['u-pick', 'farm fun', 'farmers market', 'events']
 
 export default function HomeClient() {
   const [locations, setLocations] = useState<Location[]>([])

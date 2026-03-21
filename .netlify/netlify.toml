@@ -1,6 +1,9 @@
 headersOrigin = "inline"
 redirectsOrigin = "inline"
 
+[images]
+remote_images = ["^(?:https:\\/\\/images\\.unsplash\\.com(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)|$))$"]
+
 [functions]
 
 [functions."*"]

@@ -1,4 +1,4 @@
-export type ActivityType = 'u-pick' | 'farm fun' | 'market' | 'events'
+export type ActivityType = 'u-pick' | 'farm fun' | 'farmers market' | 'events'
 export type LocationStatus = 'pending' | 'approved' | 'rejected'
 export type UserRole = 'visitor' | 'admin'
 
