@@ -24,7 +24,7 @@ export default function HomeClient() {
       {/* Header */}
       <header className="farmday-header">
         <div className="farmday-header-inner">
-          <span className="farmday-logo">🌾 Farm Day</span>
+          <Link href="/" className="farmday-logo">🌾 Farm Day</Link>
           <div className="farmday-filters">
             <button
               onClick={() => setFilter(null)}
