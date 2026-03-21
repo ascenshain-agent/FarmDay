@@ -5,6 +5,6 @@ import type { Location } from '@/lib/types'
 
 const Map = dynamic(() => import('./Map'), { ssr: false })
 
-export default function MapWrapper({ locations }: { locations: Location[] }) {
-  return <Map locations={locations} />
+export default function MapWrapper({ locations, hoveredId }: { locations: Location[]; hoveredId?: string | null }) {
+  return <Map locations={locations} hoveredId={hoveredId} />
 }

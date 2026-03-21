@@ -13,15 +13,202 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ── Layout shell ── */
+.farmday-root {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.farmday-header {
+  flex-shrink: 0;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 12px 24px;
+  z-index: 10;
+}
+.farmday-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.farmday-logo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #222;
+  white-space: nowrap;
+}
+.farmday-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.filter-pill {
+  padding: 6px 16px;
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.filter-pill:hover {
+  border-color: #222;
+}
+.filter-pill.active {
+  background: #222;
+  color: #fff;
+  border-color: #222;
+}
+
+/* ── Body: list + map ── */
+.farmday-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Left scrolling list */
+.farmday-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px 80px;
+}
+.farmday-count {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+.empty-msg {
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+/* Card grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Individual card */
+.farm-card {
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s;
+}
+.farm-card:hover {
+  transform: translateY(-2px);
+}
+.card-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #f3f4f6;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.card-img {
+  object-fit: cover;
+}
+.card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+}
+.card-body {
+  padding: 10px 4px 4px;
+}
+.card-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.card-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+}
+.card-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 2px;
+}
+.card-address {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Right sticky map */
+.farmday-map {
+  display: none; /* hidden on mobile by default */
+  position: sticky;
+  top: 0;
+  height: 100%;
+}
+
+/* ── Desktop: side-by-side ── */
+@media (min-width: 768px) {
+  .farmday-list {
+    max-width: 55%;
+  }
+  .farmday-map {
+    display: block;
+    flex: 0 0 45%;
+    width: 45%;
+  }
+  .view-map-pill {
+    display: none;
+  }
+}
+
+/* ── Mobile: toggle between list and map ── */
+.mobile-hidden {
+  display: none;
+}
+.farmday-map.mobile-visible {
+  display: block;
+  flex: 1;
+}
+
+/* Floating pill button */
+.view-map-pill {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  padding: 12px 24px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  z-index: 50;
+  white-space: nowrap;
+}
+@media (min-width: 768px) {
+  .view-map-pill {
+    display: none;
+  }
 }

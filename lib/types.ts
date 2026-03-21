@@ -14,6 +14,7 @@ export interface Location {
   contact_info: { phone?: string; email?: string; website?: string }
   created_by: string
   status: LocationStatus
+  image_url?: string
 }
 
 export interface User {
