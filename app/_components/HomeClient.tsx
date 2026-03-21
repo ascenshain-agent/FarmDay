@@ -32,15 +32,22 @@ export default function HomeClient() {
             >
               All
             </button>
-            {ACTIVITIES.map((a) => (
-              <button
-                key={a}
-                onClick={() => setFilter(filter === a ? null : a)}
-                className={`filter-pill${filter === a ? ' active' : ''}`}
-              >
-                {a}
-              </button>
-            ))}
+            {ACTIVITIES.map((a) => {
+              let label: string = a
+              if (a === 'u-pick') label = 'U-Pick'
+              if (a === 'farm fun') label = 'Farm Fun'
+              if (a === 'farmers market') label = 'Farmers Markets'
+              if (a === 'events') label = 'Events'
+              return (
+                <button
+                  key={a}
+                  onClick={() => setFilter(filter === a ? null : a)}
+                  className={`filter-pill${filter === a ? ' active' : ''}`}
+                >
+                  {label}
+                </button>
+              )
+            })}
             <button
               className="view-map-pill"
               onClick={() => setShowMap((v) => !v)}
