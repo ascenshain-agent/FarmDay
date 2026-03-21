@@ -2,95 +2,168 @@
 @import "leaflet/dist/leaflet.css";
 
 :root {
-  --background: #ffffff;
+  --bg: #FAF8F5;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --gold: #A07840;
+  --yellow: #F5C842;
+  --green-dark: #2D5016;
 }
 
 body {
-  background: var(--background);
+  background: var(--bg);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
 /* ── Layout shell ── */
 .farmday-root {
   display: flex;
   flex-direction: column;
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100dvh;
+  background: var(--bg);
 }
 
 /* ── Header ── */
 .farmday-header {
-  flex-shrink: 0;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 12px 24px;
-  z-index: 10;
-}
-.farmday-header-inner {
   display: flex;
   align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--bg);
+  flex-shrink: 0;
 }
+
+/* Desktop top nav (hidden on mobile) */
+.desktop-nav {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    padding: 16px 32px;
+    background: var(--bg);
+    flex-shrink: 0;
+    border-bottom: 1px solid #ede8df;
+  }
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+.desktop-nav-links {
+  display: flex;
+  gap: 28px;
+  margin-left: 40px;
+  flex: 1;
+}
+.desktop-nav-links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #444;
+  text-decoration: none;
+}
+.desktop-nav-links a:hover {
+  color: #111;
+}
+
+.header-hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.header-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #333;
+  border-radius: 2px;
+}
+
 .farmday-logo {
-  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.15rem;
   font-weight: 700;
   color: #222;
-  white-space: nowrap;
 }
-.farmday-filters {
+.logo-icon {
+  font-size: 1.3rem;
+}
+
+.header-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: #d1c9b8;
+  border: 2px solid #c4b89a;
+}
+
+/* ── Filters ── */
+.farmday-filters-bar {
   display: flex;
   gap: 8px;
-  flex-wrap: nowrap;
+  padding: 0 20px 14px;
   overflow-x: auto;
-  align-items: center;
+  flex-shrink: 0;
+  scrollbar-width: none;
 }
+.farmday-filters-bar::-webkit-scrollbar { display: none; }
+
+/* On desktop, hide the standalone bar; show the one inside the list panel */
+.desktop-hidden { display: flex; }
+.mobile-hidden-filters { display: none; }
+
+@media (min-width: 768px) {
+  .desktop-hidden { display: none !important; }
+  .mobile-hidden-filters {
+    display: flex;
+    padding: 0 0 14px;
+  }
+}
+
 .filter-pill {
-  padding: 6px 16px;
+  padding: 7px 18px;
   border-radius: 9999px;
-  border: 1px solid #d1d5db;
+  border: 1.5px solid #d1c9b8;
   font-size: 0.8rem;
   font-weight: 500;
   background: #fff;
-  color: #374151;
+  color: #6b7280;
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s, color 0.15s;
-}
-.filter-pill:hover {
-  border-color: #222;
+  white-space: nowrap;
+  transition: all 0.15s;
+  flex-shrink: 0;
 }
 .filter-pill.active {
-  background: #222;
-  color: #fff;
-  border-color: #222;
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: #222;
+  font-weight: 600;
 }
 
-/* ── Body: list + map ── */
+/* ── Body ── */
 .farmday-body {
   display: flex;
   flex: 1;
   overflow: hidden;
 }
 
-/* Left scrolling list */
 .farmday-list {
   flex: 1;
   overflow-y: auto;
-  padding: 20px 24px;
+  padding: 4px 20px 160px;
 }
 .farmday-count {
-  font-size: 0.8rem;
-  color: #6b7280;
-  margin-bottom: 16px;
+  font-size: 0.78rem;
+  color: #9ca3af;
+  margin-bottom: 14px;
 }
 .empty-msg {
   color: #9ca3af;
@@ -101,14 +174,12 @@ body {
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  gap: 18px;
 }
 
 /* Individual card */
 .farm-card {
   display: block;
-  border-radius: 12px;
-  overflow: hidden;
   text-decoration: none;
   color: inherit;
   transition: transform 0.15s;
@@ -116,12 +187,13 @@ body {
 .farm-card:hover {
   transform: translateY(-2px);
 }
+
 .card-img-wrap {
   position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
-  background: #f3f4f6;
-  border-radius: 12px;
+  background: #e8e0d4;
+  border-radius: 24px;
   overflow: hidden;
 }
 .card-img {
@@ -130,90 +202,163 @@ body {
 .card-img-placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  background: linear-gradient(135deg, #e8e0d4, #d4c9b0);
 }
+.card-heart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.85);
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  z-index: 1;
+}
+
 .card-body {
   padding: 10px 4px 4px;
 }
-.card-tags {
+.card-title-row {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-bottom: 4px;
-}
-.card-tag {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #6b7280;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
 }
 .card-name {
   font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+}
+.card-rating {
+  font-size: 0.82rem;
   font-weight: 600;
   color: #111827;
-  margin-bottom: 2px;
+  white-space: nowrap;
 }
-.card-address {
+.card-desc {
   font-size: 0.8rem;
-  color: #6b7280;
+  color: #9ca3af;
+  margin-bottom: 4px;
+}
+.card-distance {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gold);
 }
 
-/* Right sticky map */
+/* ── Map panel ── */
 .farmday-map {
-  display: none; /* hidden on mobile by default */
+  display: none;
   position: sticky;
   top: 0;
   height: 100%;
 }
 
-/* ── Desktop: side-by-side ── */
 @media (min-width: 768px) {
   .farmday-list {
     max-width: 55%;
+    padding: 4px 32px 20px;
   }
   .farmday-map {
     display: block;
     flex: 0 0 45%;
     width: 45%;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    align-self: flex-start;
   }
-  .view-map-pill {
-    display: none;
+  .farmday-map .leaflet-container {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* ── Mobile: toggle between list and map ── */
-.mobile-hidden {
-  display: none;
-}
+.mobile-hidden { display: none; }
 .farmday-map.mobile-visible {
   display: block;
   flex: 1;
   width: 100%;
-  min-width: 0;
-  height: calc(100vh - 56px); /* fill viewport below header */
+  height: calc(100dvh - 120px);
 }
 .farmday-map.mobile-visible .leaflet-container {
   width: 100% !important;
   height: 100% !important;
 }
 
-/* View map/list toggle pill — inline in filter row, mobile only */
-.view-map-pill {
-  flex-shrink: 0;
-  padding: 6px 16px;
+/* ── Floating View Map FAB ── */
+.view-map-fab {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
   border-radius: 9999px;
-  border: 1px solid #222;
-  font-size: 0.8rem;
-  font-weight: 600;
-  background: #222;
+  background: var(--green-dark);
   color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
   cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  z-index: 50;
   white-space: nowrap;
-  margin-left: auto;
 }
+.fab-icon { font-size: 1rem; }
+
 @media (min-width: 768px) {
-  .view-map-pill {
-    display: none;
-  }
+  .view-map-fab { display: none; }
+}
+
+/* ── Bottom Nav ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  border-radius: 9999px;
+  padding: 10px 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  z-index: 50;
+}
+.bottom-nav button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 14px;
+  color: #6b7280;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, background 0.15s;
+}
+.bottom-nav button:hover {
+  color: #222;
+  background: #f3f4f6;
+}
+
+@media (min-width: 768px) {
+  .bottom-nav { display: none; }
+  .farmday-list { padding-bottom: 20px; }
 }
