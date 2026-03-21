@@ -99,7 +99,7 @@ export default function HomeClient() {
 
         {/* Right: sticky map — full screen on mobile when toggled */}
         <div className={`farmday-map${showMap ? ' mobile-visible' : ''}`}>
-          <MapWrapper locations={locations} hoveredId={hoveredId} />
+          <MapWrapper locations={locations} hoveredId={hoveredId} visible={showMap} />
         </div>
       </div>
 

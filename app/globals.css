@@ -191,9 +191,11 @@ body {
   flex: 1;
   width: 100%;
   min-width: 0;
+  height: calc(100vh - 56px); /* fill viewport below header */
 }
 .farmday-map.mobile-visible .leaflet-container {
   width: 100% !important;
+  height: 100% !important;
 }
 
 /* View map/list toggle pill — inline in filter row, mobile only */

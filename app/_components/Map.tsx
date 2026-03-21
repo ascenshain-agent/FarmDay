@@ -6,9 +6,10 @@ import type { Location } from '@/lib/types'
 interface MapProps {
   locations: Location[]
   hoveredId?: string | null
+  visible?: boolean
 }
 
-export default function Map({ locations, hoveredId }: MapProps) {
+export default function Map({ locations, hoveredId, visible }: MapProps) {
   const mapRef = useRef<HTMLDivElement>(null)
   const mapInstanceRef = useRef<import('leaflet').Map | null>(null)
   const markersRef = useRef<globalThis.Map<string, import('leaflet').Marker>>(new globalThis.Map())
@@ -79,6 +80,13 @@ export default function Map({ locations, hoveredId }: MapProps) {
       })
     })
   }, [hoveredId])
+
+  // Invalidate size when container becomes visible (mobile toggle)
+  useEffect(() => {
+    if (visible && mapInstanceRef.current) {
+      mapInstanceRef.current.invalidateSize()
+    }
+  }, [visible])
 
   return <div ref={mapRef} className="w-full h-full" />
 }
