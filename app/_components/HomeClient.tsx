@@ -41,6 +41,12 @@ export default function HomeClient() {
                 {a}
               </button>
             ))}
+            <button
+              className="view-map-pill"
+              onClick={() => setShowMap((v) => !v)}
+            >
+              {showMap ? '☰ View list' : '🗺 View map'}
+            </button>
           </div>
         </div>
       </header>
@@ -97,13 +103,7 @@ export default function HomeClient() {
         </div>
       </div>
 
-      {/* Mobile floating pill */}
-      <button
-        className="view-map-pill"
-        onClick={() => setShowMap((v) => !v)}
-      >
-        {showMap ? '☰ View list' : '🗺 View map'}
-      </button>
+
     </div>
   )
 }
