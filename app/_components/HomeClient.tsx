@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import MapWrapper from './MapWrapper'
+import UserAvatar from './UserAvatar'
 import type { Location, ActivityType } from '@/lib/types'
 
 const ACTIVITIES: ActivityType[] = ['u-pick', 'farm fun', 'farmers market', 'events']
@@ -39,7 +40,7 @@ export default function HomeClient() {
           <a href="#">Trips</a>
           <a href="#">Inbox</a>
         </nav>
-        <div className="header-avatar" aria-label="User profile" />
+        <UserAvatar />
       </header>
 
       {/* Mobile header */}
@@ -51,7 +52,7 @@ export default function HomeClient() {
           <span className="logo-icon">🌽</span>
           <span>Farm Day</span>
         </div>
-        <div className="header-avatar" aria-label="User profile" />
+        <UserAvatar />
       </header>
 
       {/* Filters */}
