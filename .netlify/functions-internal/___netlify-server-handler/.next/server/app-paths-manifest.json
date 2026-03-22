@@ -3,6 +3,7 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/api/locations/[id]/route": "app/api/locations/[id]/route.js",
   "/api/locations/route": "app/api/locations/route.js",
+  "/auth/callback/route": "app/auth/callback/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/locations/[id]/page": "app/locations/[id]/page.js",
   "/page": "app/page.js"

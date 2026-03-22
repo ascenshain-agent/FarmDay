@@ -3,6 +3,7 @@
   "/_not-found/page": "/_not-found",
   "/api/locations/[id]/route": "/api/locations/[id]",
   "/api/locations/route": "/api/locations",
+  "/auth/callback/route": "/auth/callback",
   "/favicon.ico/route": "/favicon.ico",
   "/locations/[id]/page": "/locations/[id]",
   "/page": "/"

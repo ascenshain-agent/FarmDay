@@ -15,6 +15,15 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
+/* ── Global logo bar (all pages) ── */
+.global-logo-bar {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
 /* ── Layout shell ── */
 .farmday-root {
   display: flex;
@@ -92,6 +101,13 @@ body {
   font-size: 1.56rem;
   font-weight: 700;
   color: #222;
+  line-height: 1;
+}
+.farmday-logo span {
+  font-size: 1.56rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 .header-avatar {

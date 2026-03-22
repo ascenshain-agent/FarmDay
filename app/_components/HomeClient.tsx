@@ -41,10 +41,6 @@ export default function HomeClient() {
     <div className="farmday-root">
       {/* Desktop top nav */}
       <header className="desktop-nav">
-        <div className="farmday-logo" style={{cursor:'pointer'}} onClick={() => { setFilters([]); window.location.href = '/' }}>
-          <span>Farm Day</span>
-          <span className="logo-icon">🍎</span>
-        </div>
         <nav className="desktop-nav-links">
           <a href="#">Explore</a>
           <a href="#">Saved</a>
@@ -59,10 +55,6 @@ export default function HomeClient() {
         <button className="header-hamburger" aria-label="Menu">
           <span /><span /><span />
         </button>
-        <div className="farmday-logo" style={{cursor:'pointer'}} onClick={() => { setFilters([]); window.location.href = '/' }}>
-          <span>Farm Day</span>
-          <span className="logo-icon">🍎</span>
-        </div>
         <UserAvatar />
       </header>
 
