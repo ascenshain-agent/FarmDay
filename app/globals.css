@@ -89,12 +89,9 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 1.38rem;
+  font-size: 1.56rem;
   font-weight: 700;
   color: #222;
-}
-.logo-icon {
-  font-size: 1.56rem;
 }
 
 .header-avatar {
