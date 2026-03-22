@@ -1,6 +1,9 @@
 import { getSupabase } from '@/lib/supabase'
 import type { Location } from '@/lib/types'
+import { unstable_cache } from 'next/cache'
 import { NextResponse } from 'next/server'
+
+export const revalidate = 3600
 
 const IMAGES_BY_ACTIVITY: Record<string, string> = {
   'farmers market': 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=800&q=80',
@@ -30,24 +33,43 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const activities = searchParams.getAll('activity')
   const featured = searchParams.get('featured') === 'true'
-  const supabase = getSupabase()
 
   if (featured) {
-    const { data, error } = await supabase
-      .from('locations').select('*').eq('status', 'approved').limit(4)
-    if (error) return NextResponse.json([], { status: 500 })
-    return NextResponse.json(withImages(data ?? []))
+    const getFeatured = unstable_cache(
+      async () => {
+        const supabase = getSupabase()
+        const { data, error } = await supabase
+          .from('locations').select('*').eq('status', 'approved').limit(4)
+        if (error) return null
+        return data ?? []
+      },
+      ['locations-featured'],
+      { revalidate: 3600 }
+    )
+    const data = await getFeatured()
+    if (!data) return NextResponse.json([], { status: 500 })
+    return NextResponse.json(withImages(data))
   }
 
-  let query = supabase.from('locations').select('*').eq('status', 'approved')
-  // AND logic: each selected activity must be present in the array
-  for (const a of activities) {
-    query = query.contains('activities', JSON.stringify([a]))
-  }
+  const cacheKey = ['locations', ...activities.sort()]
+  const getFiltered = unstable_cache(
+    async () => {
+      const supabase = getSupabase()
+      let query = supabase.from('locations').select('*').eq('status', 'approved')
+      for (const a of activities) {
+        query = query.contains('activities', JSON.stringify([a]))
+      }
+      const { data, error } = await query
+      if (error) return null
+      return data ?? []
+    },
+    cacheKey,
+    { revalidate: 3600 }
+  )
 
-  const { data, error } = await query
-  if (error) return NextResponse.json([], { status: 500 })
-  return NextResponse.json(withImages(data ?? []))
+  const data = await getFiltered()
+  if (!data) return NextResponse.json([], { status: 500 })
+  return NextResponse.json(withImages(data))
 }
 
 export async function POST(request: Request) {
