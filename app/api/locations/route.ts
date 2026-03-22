@@ -29,13 +29,20 @@ function withImages(locations: Location[]): Location[] {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const activities = searchParams.getAll('activity')
+  const featured = searchParams.get('featured') === 'true'
   const supabase = getSupabase()
 
+  if (featured) {
+    const { data, error } = await supabase
+      .from('locations').select('*').eq('status', 'approved').limit(4)
+    if (error) return NextResponse.json([], { status: 500 })
+    return NextResponse.json(withImages(data ?? []))
+  }
+
   let query = supabase.from('locations').select('*').eq('status', 'approved')
-  if (activities.length === 1) {
-    query = query.contains('activities', JSON.stringify([activities[0]]))
-  } else if (activities.length > 1) {
-    query = query.or(activities.map((a) => `activities.cs.${JSON.stringify([a])}`).join(','))
+  // AND logic: each selected activity must be present in the array
+  for (const a of activities) {
+    query = query.contains('activities', JSON.stringify([a]))
   }
 
   const { data, error } = await query

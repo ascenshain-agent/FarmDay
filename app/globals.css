@@ -363,6 +363,63 @@ body {
   .farmday-list { padding-bottom: 20px; }
 }
 
+/* ── Hero: Recommended Locations ── */
+.hero-section {
+  margin-bottom: 20px;
+}
+.hero-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.hero-scroll {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+}
+.hero-scroll::-webkit-scrollbar { display: none; }
+
+.hero-card {
+  flex: 0 0 220px;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  scroll-snap-align: start;
+  transition: transform 0.15s;
+}
+.hero-card:hover { transform: translateY(-2px); }
+
+.hero-card-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #e8e0d4;
+}
+.hero-badge {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  background: var(--yellow);
+  color: #222;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  letter-spacing: 0.04em;
+  z-index: 1;
+}
+.hero-card-body {
+  padding: 8px 2px 2px;
+}
+
 /* ── Auth ── */
 .sign-in-btn {
   padding: 7px 16px;

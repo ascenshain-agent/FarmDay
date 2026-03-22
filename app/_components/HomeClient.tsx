@@ -17,9 +17,14 @@ const LABELS: Record<ActivityType, string> = {
 
 export default function HomeClient() {
   const [locations, setLocations] = useState<Location[]>([])
+  const [featured, setFeatured] = useState<Location[]>([])
   const [filters, setFilters] = useState<ActivityType[]>([])
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [showMap, setShowMap] = useState(false)
+
+  useEffect(() => {
+    fetch('/api/locations?featured=true').then((r) => r.json()).then(setFeatured).catch(() => {})
+  }, [])
 
   useEffect(() => {
     const url = filters.length
@@ -102,6 +107,32 @@ export default function HomeClient() {
               </button>
             ))}
           </div>
+
+          {/* Hero: Recommended Locations */}
+          {featured.length > 0 && (
+            <div className="hero-section">
+              <p className="hero-label">⭐ Recommended</p>
+              <div className="hero-scroll">
+                {featured.map((loc) => (
+                  <Link key={loc.id} href={`/locations/${loc.id}`} className="hero-card">
+                    <div className="hero-card-img-wrap">
+                      {loc.image_url ? (
+                        <Image src={loc.image_url} alt={loc.name} fill sizes="260px" className="card-img" unoptimized />
+                      ) : (
+                        <div className="card-img-placeholder" />
+                      )}
+                      <span className="hero-badge">Featured</span>
+                    </div>
+                    <div className="hero-card-body">
+                      <p className="card-name">{loc.name}</p>
+                      <p className="card-desc">{loc.activities.join(' · ')}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           <p className="farmday-count">{locations.length} farm{locations.length !== 1 ? 's' : ''} near Greenville, SC</p>
           <div className="card-grid">
             {locations.length === 0 ? (
