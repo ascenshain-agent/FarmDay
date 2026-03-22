@@ -17,21 +17,27 @@ const LABELS: Record<ActivityType, string> = {
 
 export default function HomeClient() {
   const [locations, setLocations] = useState<Location[]>([])
-  const [filter, setFilter] = useState<ActivityType | null>(null)
+  const [filters, setFilters] = useState<ActivityType[]>([])
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [showMap, setShowMap] = useState(false)
 
   useEffect(() => {
-    const url = filter ? `/api/locations?activity=${encodeURIComponent(filter)}` : '/api/locations'
+    const url = filters.length
+      ? `/api/locations?${filters.map((f) => `activity=${encodeURIComponent(f)}`).join('&')}`
+      : '/api/locations'
     fetch(url).then((r) => r.json()).then(setLocations).catch(() => setLocations([]))
-  }, [filter])
+  }, [filters])
+
+  function toggleFilter(a: ActivityType) {
+    setFilters((prev) => prev.includes(a) ? prev.filter((f) => f !== a) : [...prev, a])
+  }
 
   return (
     <div className="farmday-root">
       {/* Desktop top nav */}
       <header className="desktop-nav">
-        <div className="farmday-logo">
-          <span className="logo-icon">🌽</span>
+        <div className="farmday-logo" style={{cursor:'pointer'}} onClick={() => { setFilters([]); window.location.href = '/' }}>
+          <span className="logo-icon">🍎</span>
           <span>Farm Day</span>
         </div>
         <nav className="desktop-nav-links">
@@ -48,8 +54,8 @@ export default function HomeClient() {
         <button className="header-hamburger" aria-label="Menu">
           <span /><span /><span />
         </button>
-        <div className="farmday-logo">
-          <span className="logo-icon">🌽</span>
+        <div className="farmday-logo" style={{cursor:'pointer'}} onClick={() => { setFilters([]); window.location.href = '/' }}>
+          <span className="logo-icon">🍎</span>
           <span>Farm Day</span>
         </div>
         <UserAvatar />
@@ -58,16 +64,16 @@ export default function HomeClient() {
       {/* Filters */}
       <div className="farmday-filters-bar desktop-hidden">
         <button
-          onClick={() => setFilter(null)}
-          className={`filter-pill${filter === null ? ' active' : ''}`}
+          onClick={() => setFilters([])}
+          className={`filter-pill${filters.length === 0 ? ' active' : ''}`}
         >
           All
         </button>
         {ACTIVITIES.map((a) => (
           <button
             key={a}
-            onClick={() => setFilter(filter === a ? null : a)}
-            className={`filter-pill${filter === a ? ' active' : ''}`}
+            onClick={() => toggleFilter(a)}
+            className={`filter-pill${filters.includes(a) ? ' active' : ''}`}
           >
             {LABELS[a]}
           </button>
@@ -81,16 +87,16 @@ export default function HomeClient() {
           {/* Filters inside list panel on desktop */}
           <div className="farmday-filters-bar mobile-hidden-filters">
             <button
-              onClick={() => setFilter(null)}
-              className={`filter-pill${filter === null ? ' active' : ''}`}
+              onClick={() => setFilters([])}
+              className={`filter-pill${filters.length === 0 ? ' active' : ''}`}
             >
               All
             </button>
             {ACTIVITIES.map((a) => (
               <button
                 key={a}
-                onClick={() => setFilter(filter === a ? null : a)}
-                className={`filter-pill${filter === a ? ' active' : ''}`}
+                onClick={() => toggleFilter(a)}
+                className={`filter-pill${filters.includes(a) ? ' active' : ''}`}
               >
                 {LABELS[a]}
               </button>
