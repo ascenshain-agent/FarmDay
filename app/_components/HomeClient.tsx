@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { motion, AnimatePresence } from 'framer-motion'
 import MapWrapper from './MapWrapper'
 import UserAvatar from './UserAvatar'
 import SearchBar from './SearchBar'
@@ -112,21 +113,28 @@ export default function HomeClient() {
             <div className="hero-section">
               <p className="hero-label">⭐ Seasonal Picks</p>
               <div className="hero-scroll">
-                {featured.map((loc) => (
-                  <Link key={loc.id} href={`/locations/${loc.id}`} className="hero-card">
-                    <div className="hero-card-img-wrap">
-                      {loc.image_url ? (
-                        <Image src={loc.image_url} alt={loc.name} fill sizes="260px" className="card-img" unoptimized />
-                      ) : (
-                        <div className="card-img-placeholder" />
-                      )}
-                      <span className="hero-badge">Featured</span>
-                    </div>
-                    <div className="hero-card-body">
-                      <p className="card-name">{loc.name}</p>
-                      <p className="card-desc">{loc.activities.join(' · ')}</p>
-                    </div>
-                  </Link>
+                {featured.map((loc, i) => (
+                  <motion.div
+                    key={loc.id}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: i * 0.1 }}
+                  >
+                    <Link href={`/locations/${loc.id}`} className="hero-card">
+                      <div className="hero-card-img-wrap">
+                        {loc.image_url ? (
+                          <Image src={loc.image_url} alt={loc.name} fill sizes="260px" className="card-img" unoptimized />
+                        ) : (
+                          <div className="card-img-placeholder" />
+                        )}
+                        <span className="hero-badge">Featured</span>
+                      </div>
+                      <div className="hero-card-body">
+                        <p className="card-name">{loc.name}</p>
+                        <p className="card-desc">{loc.activities.join(" \u00b7 ")}</p>
+                      </div>
+                    </Link>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -134,43 +142,54 @@ export default function HomeClient() {
 
           <p className="farmday-count">{locations.length} farm{locations.length !== 1 ? 's' : ''} near Greenville, SC</p>
           <div className="card-grid">
-            {locations.length === 0 ? (
-              <p className="empty-msg">No locations found.</p>
-            ) : (
-              locations.map((loc) => (
-                <Link
-                  key={loc.id}
-                  href={`/locations/${loc.id}`}
-                  className="farm-card"
-                  onMouseEnter={() => setHoveredId(loc.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                >
-                  <div className="card-img-wrap">
-                    {loc.image_url ? (
-                      <Image
-                        src={loc.image_url}
-                        alt={loc.name}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 400px"
-                        className="card-img"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="card-img-placeholder" />
-                    )}
-                    <button className="card-heart" aria-label="Save">♡</button>
-                  </div>
-                  <div className="card-body">
-                    <div className="card-title-row">
-                      <p className="card-name">{loc.name}</p>
-                      <span className="card-rating">★ 4.92</span>
-                    </div>
-                    <p className="card-desc">{loc.activities.join(' · ')}</p>
-                    <p className="card-distance">{loc.address}</p>
-                  </div>
-                </Link>
-              ))
-            )}
+            <AnimatePresence mode="popLayout">
+              {locations.length === 0 ? (
+                <motion.p key="empty" className="empty-msg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  No locations found.
+                </motion.p>
+              ) : (
+                locations.map((loc, i) => (
+                  <motion.div
+                    key={loc.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.3, delay: i * 0.05 }}
+                  >
+                    <Link
+                      href={`/locations/${loc.id}`}
+                      className="farm-card"
+                      onMouseEnter={() => setHoveredId(loc.id)}
+                      onMouseLeave={() => setHoveredId(null)}
+                    >
+                      <div className="card-img-wrap">
+                        {loc.image_url ? (
+                          <Image
+                            src={loc.image_url}
+                            alt={loc.name}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 400px"
+                            className="card-img"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="card-img-placeholder" />
+                        )}
+                        <button className="card-heart" aria-label="Save">♡</button>
+                      </div>
+                      <div className="card-body">
+                        <div className="card-title-row">
+                          <p className="card-name">{loc.name}</p>
+                          <span className="card-rating">★ 4.92</span>
+                        </div>
+                        <p className="card-desc">{loc.activities.join(" \u00b7 ")}</p>
+                        <p className="card-distance">{loc.address}</p>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
