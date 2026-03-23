@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-export default function SearchBar() {
+export default function SearchBar({ onFilterChange }: { onFilterChange?: (f: string[]) => void }) {
   const [styleOpen, setStyleOpen] = useState(false)
   const [barnOpen, setBarnOpen] = useState(false)
 
@@ -15,7 +15,7 @@ export default function SearchBar() {
         
         {/* Section 1: Style */}
         <div className="search-section" onClick={() => { setStyleOpen(!styleOpen); setBarnOpen(false); }}>
-          <div className="search-label">Style</div>
+          <div className="search-label">Where to?</div>
           <div className="search-value">{style}</div>
           {styleOpen && (
             <div className="search-dropdown">
@@ -31,8 +31,8 @@ export default function SearchBar() {
         <div className="search-divider" />
 
         {/* Section 2: What's in the barn */}
-        <div className="search-section" onClick={() => { setBarnOpen(!barnOpen); setStyleOpen(false); }}>
-          <div className="search-label">What's in the barn?</div>
+        <div className={`search-section ${(style === "Farmer's Market" || style === 'Fruit Stand') ? 'disabled' : ''}`} onClick={() => { if (style === "Farmer's Market" || style === 'Fruit Stand') return; setBarnOpen(!barnOpen); setStyleOpen(false); }}>
+          <div className="search-label">Activities</div>
           <div className="search-value">{barn}</div>
           {barnOpen && (
             <div className="search-dropdown">
@@ -46,7 +46,12 @@ export default function SearchBar() {
         </div>
 
         {/* Section 3: Search Button */}
-        <button className="search-submit">
+        <button className="search-submit" onClick={() => {
+          if (onFilterChange) {
+            if (style === "Farmer's Market") onFilterChange(['farmers market']);
+            else onFilterChange([barn]);
+          }
+        }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>

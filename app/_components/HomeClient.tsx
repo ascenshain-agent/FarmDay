@@ -51,11 +51,19 @@ export default function HomeClient() {
         <UserAvatar />
       </header>
       <div className="desktop-only">
-        <SearchBar />
+        <SearchBar onFilterChange={(f) => setFilters(f as ActivityType[])} />
+      <header className="farmday-header mobile-only" style={{ position: 'absolute', top: 0, right: 0, background: 'transparent', padding: '18px', zIndex: 200, width: 'auto' }}>
+        <div style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
+          <div className="header-avatar" onClick={() => alert('Sign In coming soon!')} />
+          <button className="header-hamburger" aria-label="Menu">
+            <span /><span /><span />
+          </button>
+        </div>
+      </header>
       </div>
 
       {/* Mobile header */}
-      <SearchBar />
+      <SearchBar onFilterChange={(f) => setFilters(f as ActivityType[])} />
 
       {/* Filters */}
       <div className="farmday-filters-bar desktop-hidden">
