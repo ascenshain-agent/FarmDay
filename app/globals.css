@@ -666,3 +666,24 @@ body {
 }
 
 @media (max-width: 768px) { .desktop-only { display: none !important; } }
+
+.header-hamburger {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  width: 32px;
+  height: 32px;
+  z-index: 999;
+}
+.header-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #333;
+  border-radius: 2px;
+}
