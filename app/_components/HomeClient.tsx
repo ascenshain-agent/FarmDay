@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import MapWrapper from './MapWrapper'
 import UserAvatar from './UserAvatar'
+import SearchBar from './SearchBar'
 import type { Location, ActivityType } from '@/lib/types'
 
 const ACTIVITIES: ActivityType[] = ['u-pick', 'farm fun', 'farmers market', 'events']
@@ -49,14 +50,12 @@ export default function HomeClient() {
         </nav>
         <UserAvatar />
       </header>
+      <div className="desktop-only">
+        <SearchBar />
+      </div>
 
       {/* Mobile header */}
-      <header className="farmday-header mobile-only">
-        <button className="header-hamburger" aria-label="Menu">
-          <span /><span /><span />
-        </button>
-        <UserAvatar />
-      </header>
+      <SearchBar />
 
       {/* Filters */}
       <div className="farmday-filters-bar desktop-hidden">

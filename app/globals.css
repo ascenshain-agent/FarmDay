@@ -538,3 +538,131 @@ body {
   color: #374151;
 }
 .avatar-menu button:hover { background: #f9fafb; }
+
+
+/* ── Airbnb-style Search Pill ── */
+.search-pill-container {
+  display: flex;
+  justify-content: center;
+  padding: 12px 20px;
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid #ede8df;
+}
+
+.search-pill {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 9999px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px 8px 24px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.search-section {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4px 16px;
+  cursor: pointer;
+  border-radius: 9999px;
+  transition: background 0.15s;
+}
+
+.search-section:hover {
+  background: #f3f4f6;
+}
+
+.search-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: 0.04em;
+}
+
+.search-value {
+  font-size: 0.85rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-divider {
+  width: 1px;
+  height: 32px;
+  background: #e5e7eb;
+  margin: 0 4px;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 0;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+  border: 1px solid #e5e7eb;
+  min-width: 240px;
+  padding: 16px 0;
+  z-index: 200;
+}
+
+.search-option {
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  color: #374151;
+  cursor: pointer;
+}
+
+.search-option:hover {
+  background: #f3f4f6;
+  color: #111;
+}
+
+.search-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--yellow);
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: 8px;
+  transition: transform 0.1s;
+}
+
+.search-submit:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .search-pill {
+    padding: 6px 6px 6px 16px;
+  }
+  .search-section {
+    padding: 2px 8px;
+  }
+  .search-label {
+    font-size: 0.65rem;
+  }
+  .search-value {
+    font-size: 0.75rem;
+  }
+  .search-submit {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 768px) { .desktop-only { display: none !important; } }
