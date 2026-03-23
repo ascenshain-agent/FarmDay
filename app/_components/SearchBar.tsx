@@ -19,7 +19,7 @@ export default function SearchBar() {
           <div className="search-value">{style}</div>
           {styleOpen && (
             <div className="search-dropdown">
-              {['Farm', 'Farmer's Market', 'Fruit Stand'].map(opt => (
+              {['Farm', "Farmer's Market", 'Fruit Stand'].map(opt => (
                 <div key={opt} className="search-option" onClick={(e) => { e.stopPropagation(); setStyle(opt); setStyleOpen(false); }}>
                   {opt}
                 </div>
@@ -36,7 +36,7 @@ export default function SearchBar() {
           <div className="search-value">{barn}</div>
           {barnOpen && (
             <div className="search-dropdown">
-              {['u-pick', 'hay-day fun', 'Farmer's Brew', 'Ciders', 'Wines'].map(opt => (
+              {['u-pick', 'hay-day fun', "Farmer's Brew", 'Ciders', 'Wines'].map(opt => (
                 <div key={opt} className="search-option" onClick={(e) => { e.stopPropagation(); setBarn(opt); setBarnOpen(false); }}>
                   {opt}
                 </div>
