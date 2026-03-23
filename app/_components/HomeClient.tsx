@@ -110,7 +110,7 @@ export default function HomeClient() {
           {/* Hero: Recommended Locations */}
           {featured.length > 0 && (
             <div className="hero-section">
-              <p className="hero-label">⭐ Recommended</p>
+              <p className="hero-label">⭐ Seasonal Picks</p>
               <div className="hero-scroll">
                 {featured.map((loc) => (
                   <Link key={loc.id} href={`/locations/${loc.id}`} className="hero-card">
