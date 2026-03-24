@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -9,13 +9,14 @@ import UserAvatar from './UserAvatar'
 import SearchBar from './SearchBar'
 import type { Location, ActivityType } from '@/lib/types'
 
-const ACTIVITIES: ActivityType[] = ['u-pick', 'farm fun', 'farmers market', 'events']
-const LABELS: Record<ActivityType, string> = {
-  'u-pick': 'U-Pick',
-  'farm fun': 'Farm Fun',
-  'farmers market': 'Farmers Markets',
-  'events': 'Events',
-}
+const RIPE_NOW = [
+  { emoji: '🍓', name: 'Strawberries', note: 'Peak season' },
+  { emoji: '🥬', name: 'Lettuce', note: 'Ready now' },
+  { emoji: '🥕', name: 'Carrots', note: 'Fresh harvest' },
+  { emoji: '🫛', name: 'Snap Peas', note: 'Just started' },
+  { emoji: '🧅', name: 'Green Onions', note: 'Abundant' },
+  { emoji: '🫐', name: 'Blueberries', note: 'Coming soon' },
+]
 
 export default function HomeClient() {
   const [locations, setLocations] = useState<Location[]>([])
@@ -23,6 +24,7 @@ export default function HomeClient() {
   const [filters, setFilters] = useState<ActivityType[]>([])
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [showMap, setShowMap] = useState(false)
+  const heroRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetch('/api/locations?featured=true').then((r) => r.json()).then(setFeatured).catch(() => {})
@@ -35,9 +37,19 @@ export default function HomeClient() {
     fetch(url).then((r) => r.json()).then(setLocations).catch(() => setLocations([]))
   }, [filters])
 
-  function toggleFilter(a: ActivityType) {
-    setFilters((prev) => prev.includes(a) ? prev.filter((f) => f !== a) : [...prev, a])
-  }
+  // Auto-scroll hero gallery
+  useEffect(() => {
+    const el = heroRef.current
+    if (!el) return
+    const id = setInterval(() => {
+      if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 10) {
+        el.scrollTo({ left: 0, behavior: 'smooth' })
+      } else {
+        el.scrollBy({ left: 240, behavior: 'smooth' })
+      }
+    }, 3000)
+    return () => clearInterval(id)
+  }, [featured])
 
   return (
     <div className="farmday-root">
@@ -51,11 +63,13 @@ export default function HomeClient() {
         </nav>
         <UserAvatar />
       </header>
-      <div className="desktop-only">
-        <SearchBar onFilterChange={(f) => setFilters(f as ActivityType[])} />
-      </div>
-      <header className="farmday-header mobile-only" style={{ position: 'absolute', top: 0, right: 0, background: 'transparent', padding: '18px', zIndex: 200, width: 'auto' }}>
-        <div style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
+
+      {/* Single search bar for all viewports */}
+      <SearchBar onFilterChange={(f) => setFilters(f as ActivityType[])} />
+
+      {/* Mobile header: avatar + hamburger */}
+      <header className="farmday-header mobile-only">
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           <div className="header-avatar" onClick={() => alert('Sign In coming soon!')} />
           <button className="header-hamburger" aria-label="Menu">
             <span /><span /><span />
@@ -63,61 +77,20 @@ export default function HomeClient() {
         </div>
       </header>
 
-      {/* Mobile search */}
-      <div className="mobile-only">
-        <SearchBar onFilterChange={(f) => setFilters(f as ActivityType[])} />
-      </div>
-
-      {/* Filters */}
-      <div className="farmday-filters-bar desktop-hidden">
-        <button
-          onClick={() => setFilters([])}
-          className={`filter-pill${filters.length === 0 ? ' active' : ''}`}
-        >
-          All
-        </button>
-        {ACTIVITIES.map((a) => (
-          <button
-            key={a}
-            onClick={() => toggleFilter(a)}
-            className={`filter-pill${filters.includes(a) ? ' active' : ''}`}
-          >
-            {LABELS[a]}
-          </button>
-        ))}
-      </div>
-
       {/* Body */}
       <div className="farmday-body">
         {/* Card list */}
         <div className={`farmday-list${showMap ? ' mobile-hidden' : ''}`}>
-          {/* Filters inside list panel on desktop */}
-          <div className="farmday-filters-bar mobile-hidden-filters">
-            <button
-              onClick={() => setFilters([])}
-              className={`filter-pill${filters.length === 0 ? ' active' : ''}`}
-            >
-              All
-            </button>
-            {ACTIVITIES.map((a) => (
-              <button
-                key={a}
-                onClick={() => toggleFilter(a)}
-                className={`filter-pill${filters.includes(a) ? ' active' : ''}`}
-              >
-                {LABELS[a]}
-              </button>
-            ))}
-          </div>
 
-          {/* Hero: Recommended Locations */}
+          {/* Hero: Seasonal Picks — uniform tiles + auto-scroll */}
           {featured.length > 0 && (
             <div className="hero-section">
               <p className="hero-label">⭐ Seasonal Picks</p>
-              <div className="hero-scroll">
+              <div className="hero-scroll" ref={heroRef}>
                 {featured.map((loc, i) => (
                   <motion.div
                     key={loc.id}
+                    className="hero-slide"
                     initial={{ opacity: 0, x: 30 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.4, delay: i * 0.1 }}
@@ -125,7 +98,7 @@ export default function HomeClient() {
                     <Link href={`/locations/${loc.id}`} className="hero-card">
                       <div className="hero-card-img-wrap">
                         {loc.image_url ? (
-                          <Image src={loc.image_url} alt={loc.name} fill sizes="260px" className="card-img" unoptimized />
+                          <Image src={loc.image_url} alt={loc.name} fill sizes="240px" className="card-img" unoptimized />
                         ) : (
                           <div className="card-img-placeholder" />
                         )}
@@ -133,11 +106,32 @@ export default function HomeClient() {
                       </div>
                       <div className="hero-card-body">
                         <p className="card-name">{loc.name}</p>
-                        <p className="card-desc">{loc.activities.join(" \u00b7 ")}</p>
+                        <p className="card-desc">{loc.activities.join(' · ')}</p>
                       </div>
                     </Link>
                   </motion.div>
                 ))}
+
+                {/* Ripe Now news tile */}
+                <motion.div
+                  className="hero-slide"
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: featured.length * 0.1 }}
+                >
+                  <div className="ripe-now-card">
+                    <p className="ripe-now-title">🌱 Ripe for Picking</p>
+                    <ul className="ripe-now-list">
+                      {RIPE_NOW.map((item) => (
+                        <li key={item.name}>
+                          <span>{item.emoji}</span>
+                          <span className="ripe-name">{item.name}</span>
+                          <span className="ripe-note">{item.note}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.div>
               </div>
             </div>
           )}
@@ -166,14 +160,7 @@ export default function HomeClient() {
                     >
                       <div className="card-img-wrap">
                         {loc.image_url ? (
-                          <Image
-                            src={loc.image_url}
-                            alt={loc.name}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 400px"
-                            className="card-img"
-                            unoptimized
-                          />
+                          <Image src={loc.image_url} alt={loc.name} fill sizes="(max-width: 768px) 100vw, 400px" className="card-img" unoptimized />
                         ) : (
                           <div className="card-img-placeholder" />
                         )}
@@ -184,7 +171,7 @@ export default function HomeClient() {
                           <p className="card-name">{loc.name}</p>
                           <span className="card-rating">★ 4.92</span>
                         </div>
-                        <p className="card-desc">{loc.activities.join(" \u00b7 ")}</p>
+                        <p className="card-desc">{loc.activities.join(' · ')}</p>
                         <p className="card-distance">{loc.address}</p>
                       </div>
                     </Link>
@@ -202,10 +189,7 @@ export default function HomeClient() {
       </div>
 
       {/* Floating View Map button */}
-      <button
-        className={`view-map-fab${showMap ? ' active' : ''}`}
-        onClick={() => setShowMap((v) => !v)}
-      >
+      <button className={`view-map-fab${showMap ? ' active' : ''}`} onClick={() => setShowMap((v) => !v)}>
         <span className="fab-icon">🗺</span>
         {showMap ? 'View List' : 'View Map'}
       </button>

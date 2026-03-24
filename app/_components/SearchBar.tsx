@@ -2,25 +2,35 @@
 
 import { useState } from 'react'
 
-export default function SearchBar({ onFilterChange }: { onFilterChange?: (f: string[]) => void }) {
-  const [styleOpen, setStyleOpen] = useState(false)
-  const [barnOpen, setBarnOpen] = useState(false)
+const LOCATIONS = ['Farm', "Farmer's Market", 'Fruit Stand']
+const ACTIVITIES = ['u-pick', 'farm fun', 'farmers market', 'events', 'hay-day fun', "Farmer's Brew", 'Ciders', 'Wines']
 
-  const [style, setStyle] = useState('Farm')
-  const [barn, setBarn] = useState('u-pick')
+export default function SearchBar({ onFilterChange }: { onFilterChange?: (f: string[]) => void }) {
+  const [locOpen, setLocOpen] = useState(false)
+  const [actOpen, setActOpen] = useState(false)
+  const [location, setLocation] = useState('Farm')
+  const [activity, setActivity] = useState('All activities')
+
+  function handleSearch() {
+    if (!onFilterChange) return
+    if (location === "Farmer's Market") onFilterChange(['farmers market'])
+    else if (activity !== 'All activities') onFilterChange([activity])
+    else onFilterChange([])
+  }
+
+  const actDisabled = location === "Farmer's Market" || location === 'Fruit Stand'
 
   return (
     <div className="search-pill-container">
       <div className="search-pill">
-        
-        {/* Section 1: Style */}
-        <div className="search-section" onClick={() => { setStyleOpen(!styleOpen); setBarnOpen(false); }}>
+        {/* Where to */}
+        <div className="search-section" onClick={() => { setLocOpen(!locOpen); setActOpen(false) }}>
           <div className="search-label">Where to?</div>
-          <div className="search-value">{style}</div>
-          {styleOpen && (
+          <div className="search-value">{location}</div>
+          {locOpen && (
             <div className="search-dropdown">
-              {['Farm', "Farmer's Market", 'Fruit Stand'].map(opt => (
-                <div key={opt} className="search-option" onClick={(e) => { e.stopPropagation(); setStyle(opt); setStyleOpen(false); }}>
+              {LOCATIONS.map(opt => (
+                <div key={opt} className="search-option" onClick={(e) => { e.stopPropagation(); setLocation(opt); setLocOpen(false); if (opt !== 'Farm') { setActivity('All activities') } }}>
                   {opt}
                 </div>
               ))}
@@ -30,14 +40,15 @@ export default function SearchBar({ onFilterChange }: { onFilterChange?: (f: str
 
         <div className="search-divider" />
 
-        {/* Section 2: What's in the barn */}
-        <div className={`search-section ${(style === "Farmer's Market" || style === 'Fruit Stand') ? 'disabled' : ''}`} onClick={() => { if (style === "Farmer's Market" || style === 'Fruit Stand') return; setBarnOpen(!barnOpen); setStyleOpen(false); }}>
+        {/* Activities */}
+        <div className={`search-section${actDisabled ? ' disabled' : ''}`} onClick={() => { if (actDisabled) return; setActOpen(!actOpen); setLocOpen(false) }}>
           <div className="search-label">Activities</div>
-          <div className="search-value">{barn}</div>
-          {barnOpen && (
+          <div className="search-value">{actDisabled ? '—' : activity}</div>
+          {actOpen && (
             <div className="search-dropdown">
-              {['u-pick', 'hay-day fun', "Farmer's Brew", 'Ciders', 'Wines'].map(opt => (
-                <div key={opt} className="search-option" onClick={(e) => { e.stopPropagation(); setBarn(opt); setBarnOpen(false); }}>
+              <div className="search-option" onClick={(e) => { e.stopPropagation(); setActivity('All activities'); setActOpen(false) }}>All activities</div>
+              {ACTIVITIES.map(opt => (
+                <div key={opt} className="search-option" onClick={(e) => { e.stopPropagation(); setActivity(opt); setActOpen(false) }}>
                   {opt}
                 </div>
               ))}
@@ -45,19 +56,12 @@ export default function SearchBar({ onFilterChange }: { onFilterChange?: (f: str
           )}
         </div>
 
-        {/* Section 3: Search Button */}
-        <button className="search-submit" onClick={() => {
-          if (onFilterChange) {
-            if (style === "Farmer's Market") onFilterChange(['farmers market']);
-            else onFilterChange([barn]);
-          }
-        }}>
+        {/* Search button */}
+        <button className="search-submit" onClick={handleSearch}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </button>
-
       </div>
     </div>
   )

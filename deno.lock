@@ -20,6 +20,7 @@
         "npm:@types/react@19",
         "npm:eslint-config-next@16.2.0",
         "npm:eslint@9",
+        "npm:framer-motion@^12.38.0",
         "npm:leaflet@^1.9.4",
         "npm:next@16.2.0",
         "npm:pg@^8.20.0",
