@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -24,7 +24,6 @@ export default function HomeClient() {
   const [filters, setFilters] = useState<ActivityType[]>([])
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [showMap, setShowMap] = useState(false)
-  const heroRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetch('/api/locations?featured=true').then((r) => r.json()).then(setFeatured).catch(() => {})
@@ -36,20 +35,6 @@ export default function HomeClient() {
       : '/api/locations'
     fetch(url).then((r) => r.json()).then(setLocations).catch(() => setLocations([]))
   }, [filters])
-
-  // Auto-scroll hero gallery
-  useEffect(() => {
-    const el = heroRef.current
-    if (!el) return
-    const id = setInterval(() => {
-      if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 10) {
-        el.scrollTo({ left: 0, behavior: 'smooth' })
-      } else {
-        el.scrollBy({ left: 240, behavior: 'smooth' })
-      }
-    }, 3000)
-    return () => clearInterval(id)
-  }, [featured])
 
   return (
     <div className="farmday-root">
@@ -67,14 +52,9 @@ export default function HomeClient() {
       {/* Single search bar for all viewports */}
       <SearchBar onFilterChange={(f) => setFilters(f as ActivityType[])} />
 
-      {/* Mobile header: avatar + hamburger */}
+      {/* Mobile header: avatar only (no hamburger) */}
       <header className="farmday-header mobile-only">
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <div className="header-avatar" onClick={() => alert('Sign In coming soon!')} />
-          <button className="header-hamburger" aria-label="Menu">
-            <span /><span /><span />
-          </button>
-        </div>
+        <UserAvatar />
       </header>
 
       {/* Body */}
@@ -82,11 +62,11 @@ export default function HomeClient() {
         {/* Card list */}
         <div className={`farmday-list${showMap ? ' mobile-hidden' : ''}`}>
 
-          {/* Hero: Seasonal Picks — uniform tiles + auto-scroll */}
+          {/* Hero: Seasonal Picks — manual scroll */}
           {featured.length > 0 && (
             <div className="hero-section">
               <p className="hero-label">⭐ Seasonal Picks</p>
-              <div className="hero-scroll" ref={heroRef}>
+              <div className="hero-scroll">
                 {featured.map((loc, i) => (
                   <motion.div
                     key={loc.id}
@@ -95,18 +75,23 @@ export default function HomeClient() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.4, delay: i * 0.1 }}
                   >
-                    <Link href={`/locations/${loc.id}`} className="hero-card">
-                      <div className="hero-card-img-wrap">
+                    <Link href={`/locations/${loc.id}`} className="farm-card">
+                      <div className="card-img-wrap">
                         {loc.image_url ? (
-                          <Image src={loc.image_url} alt={loc.name} fill sizes="240px" className="card-img" unoptimized />
+                          <Image src={loc.image_url} alt={loc.name} fill sizes="300px" className="card-img" unoptimized />
                         ) : (
                           <div className="card-img-placeholder" />
                         )}
                         <span className="hero-badge">Featured</span>
+                        <button className="card-heart" aria-label="Save">♡</button>
                       </div>
-                      <div className="hero-card-body">
-                        <p className="card-name">{loc.name}</p>
+                      <div className="card-body">
+                        <div className="card-title-row">
+                          <p className="card-name">{loc.name}</p>
+                          <span className="card-rating">★ 4.92</span>
+                        </div>
                         <p className="card-desc">{loc.activities.join(' · ')}</p>
+                        <p className="card-distance">{loc.address}</p>
                       </div>
                     </Link>
                   </motion.div>
@@ -160,7 +145,7 @@ export default function HomeClient() {
                     >
                       <div className="card-img-wrap">
                         {loc.image_url ? (
-                          <Image src={loc.image_url} alt={loc.name} fill sizes="(max-width: 768px) 100vw, 400px" className="card-img" unoptimized />
+                          <Image src={loc.image_url} alt={loc.name} fill sizes="(max-width: 768px) 100vw, 300px" className="card-img" unoptimized />
                         ) : (
                           <div className="card-img-placeholder" />
                         )}

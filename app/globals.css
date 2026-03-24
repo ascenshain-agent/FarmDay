@@ -2,27 +2,44 @@
 @import "leaflet/dist/leaflet.css";
 
 :root {
-  --bg: #FAF8F5;
-  --foreground: #171717;
-  --gold: #A07840;
-  --yellow: #F5C842;
-  --green-dark: #2D5016;
+  --bg: #ffffff;
+  --foreground: #222222;
+  --accent: #FF385C;
+  --gray-light: #f7f7f7;
+  --gray-border: #ebebeb;
+  --gray-text: #717171;
+  --card-radius: 12px;
 }
 
 body {
   background: var(--bg);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), 'Circular', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
 }
 
 /* ── Global logo bar ── */
 .global-logo-bar {
   display: flex;
   align-items: center;
-  padding: 14px 20px;
+  padding: 0 24px;
+  height: 64px;
   background: var(--bg);
   flex-shrink: 0;
+  border-bottom: 1px solid var(--gray-border);
 }
+
+/* ── Logo — same height as avatar (36px) ── */
+.farmday-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+.farmday-logo .logo-icon { font-size: 1.5rem; line-height: 36px; display: inline-flex; align-items: center; }
+.farmday-logo span { font-size: 1.25rem; line-height: 36px; display: inline-flex; align-items: center; }
 
 /* ── Layout shell ── */
 .farmday-root {
@@ -32,95 +49,66 @@ body {
   background: var(--bg);
 }
 
-/* ── Mobile header (hamburger + avatar) ── */
+/* ── Mobile header — avatar only, no hamburger ── */
 .farmday-header.mobile-only {
   position: fixed;
   top: 0;
   right: 0;
-  background: transparent;
-  padding: 18px;
+  padding: 14px 16px;
   z-index: 200;
+  background: transparent;
   width: auto;
 }
 
+/* ── Avatar circle ── */
 .header-avatar {
   width: 36px;
   height: 36px;
-  border-radius: 9999px;
-  background: #d1c9b8;
-  border: 2px solid #c4b89a;
+  border-radius: 50%;
+  background: var(--gray-light);
+  border: 1px solid var(--gray-border);
   cursor: pointer;
-}
-
-.header-hamburger {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  width: 36px;
-  height: 36px;
-  z-index: 201;
+  overflow: hidden;
+  padding: 0;
+  flex-shrink: 0;
 }
-.header-hamburger span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: #333;
-  border-radius: 2px;
-}
+.pig-emoji { font-size: 1.15rem; line-height: 1; }
 
 /* ── Desktop top nav ── */
-.desktop-nav {
-  display: none;
-}
+.desktop-nav { display: none; }
 
 @media (min-width: 768px) {
   .desktop-nav {
     display: flex;
     align-items: center;
-    padding: 16px 32px;
+    padding: 0 24px;
+    height: 48px;
     background: var(--bg);
     flex-shrink: 0;
-    border-bottom: 1px solid #ede8df;
+    border-bottom: 1px solid var(--gray-border);
   }
-  .mobile-only {
-    display: none !important;
-  }
+  .mobile-only { display: none !important; }
 }
 
 .desktop-nav-links {
   display: flex;
-  gap: 28px;
+  gap: 32px;
   margin-left: 40px;
   flex: 1;
 }
 .desktop-nav-links a {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: #444;
+  color: var(--gray-text);
   text-decoration: none;
+  padding: 12px 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
 }
-.desktop-nav-links a:hover { color: #111; }
-
-.farmday-logo {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 1.56rem;
-  font-weight: 700;
-  color: #222;
-  line-height: 1;
-}
-.farmday-logo span {
-  font-size: 1.56rem;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-}
+.desktop-nav-links a:hover { color: var(--foreground); border-bottom-color: var(--foreground); }
 
 /* ── Body ── */
 .farmday-body {
@@ -132,85 +120,83 @@ body {
 .farmday-list {
   flex: 1;
   overflow-y: auto;
-  padding: 4px 20px 160px;
+  padding: 20px 24px 160px;
 }
 .farmday-count {
-  font-size: 0.78rem;
-  color: #9ca3af;
-  margin-bottom: 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gray-text);
+  margin-bottom: 16px;
 }
 .empty-msg {
-  color: #9ca3af;
+  color: var(--gray-text);
   font-size: 0.875rem;
 }
 
-/* ── Card grid — centered on mobile ── */
+/* ── Uniform card grid — all tiles same size ── */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 18px;
-  justify-items: center;
+  gap: 24px;
 }
 
+/* ── Farm card — Airbnb style ── */
 .farm-card {
   display: block;
   text-decoration: none;
   color: inherit;
   transition: transform 0.15s;
-  width: 100%;
-  max-width: 400px;
 }
-.farm-card:hover { transform: translateY(-2px); }
+.farm-card:hover { transform: none; }
 
 .card-img-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
-  background: #e8e0d4;
-  border-radius: 24px;
+  aspect-ratio: 20 / 19;
+  background: var(--gray-light);
+  border-radius: var(--card-radius);
   overflow: hidden;
 }
 .card-img { object-fit: cover; }
 .card-img-placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #e8e0d4, #d4c9b0);
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
 }
 .card-heart {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 12px;
   width: 32px;
   height: 32px;
-  border-radius: 9999px;
-  background: rgba(255,255,255,0.85);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
   border: none;
   cursor: pointer;
   font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px);
   z-index: 1;
+  transition: transform 0.1s;
 }
+.card-heart:hover { transform: scale(1.1); }
 
-.card-body { padding: 10px 4px 4px; }
+.card-body { padding: 10px 0 0; }
 .card-title-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 3px;
 }
-.card-name { font-size: 0.95rem; font-weight: 700; color: #111827; }
-.card-rating { font-size: 0.82rem; font-weight: 600; color: #111827; white-space: nowrap; }
-.card-desc { font-size: 0.8rem; color: #9ca3af; margin-bottom: 4px; }
+.card-name { font-size: 0.9375rem; font-weight: 600; color: var(--foreground); margin: 0; }
+.card-rating { font-size: 0.8125rem; font-weight: 500; color: var(--foreground); white-space: nowrap; }
+.card-desc { font-size: 0.8125rem; color: var(--gray-text); margin: 2px 0; }
 .card-distance {
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--gold);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--gray-text);
+  text-decoration: underline;
 }
 
 /* ── Map panel ── */
@@ -224,7 +210,7 @@ body {
 @media (min-width: 768px) {
   .farmday-list {
     max-width: 55%;
-    padding: 4px 32px 20px;
+    padding: 20px 24px 20px;
   }
   .farmday-map {
     display: block;
@@ -235,13 +221,8 @@ body {
     height: 100dvh;
     align-self: flex-start;
   }
-  .farmday-map .leaflet-container {
-    width: 100% !important;
-    height: 100% !important;
-  }
-  .card-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .farmday-map .leaflet-container { width: 100% !important; height: 100% !important; }
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 .mobile-hidden { display: none; }
@@ -251,10 +232,7 @@ body {
   width: 100%;
   height: calc(100dvh - 120px);
 }
-.farmday-map.mobile-visible .leaflet-container {
-  width: 100% !important;
-  height: 100% !important;
-}
+.farmday-map.mobile-visible .leaflet-container { width: 100% !important; height: 100% !important; }
 
 /* ── Floating View Map FAB ── */
 .view-map-fab {
@@ -265,15 +243,15 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 14px 24px;
   border-radius: 9999px;
-  background: var(--green-dark);
+  background: var(--foreground);
   color: #fff;
   font-size: 0.875rem;
   font-weight: 600;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
   z-index: 50;
   white-space: nowrap;
 }
@@ -286,52 +264,51 @@ body {
 /* ── Bottom Nav ── */
 .bottom-nav {
   position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: space-around;
   background: #fff;
-  border-radius: 9999px;
-  padding: 10px 20px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--gray-border);
   z-index: 50;
 }
 .bottom-nav button {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px 14px;
-  color: #6b7280;
-  border-radius: 9999px;
+  padding: 8px 16px;
+  color: var(--gray-text);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: color 0.15s, background 0.15s;
+  transition: color 0.15s;
 }
-.bottom-nav button:hover { color: #222; background: #f3f4f6; }
+.bottom-nav button:hover { color: var(--foreground); }
 
 @media (min-width: 768px) {
   .bottom-nav { display: none; }
   .farmday-list { padding-bottom: 20px; }
 }
 
-/* ── Hero: Seasonal Picks — uniform tiles + auto-scroll ── */
+/* ── Hero: Seasonal Picks — manual scroll, same tile size ── */
 .hero-section {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 .hero-label {
-  font-size: 0.78rem;
+  font-size: 1.375rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--gold);
-  margin-bottom: 10px;
+  color: var(--foreground);
+  margin-bottom: 16px;
+  text-transform: none;
+  letter-spacing: 0;
 }
 .hero-scroll {
   display: flex;
-  gap: 14px;
+  gap: 16px;
   overflow-x: auto;
   scrollbar-width: none;
   padding-bottom: 4px;
@@ -340,60 +317,41 @@ body {
 .hero-scroll::-webkit-scrollbar { display: none; }
 
 .hero-slide {
-  flex: 0 0 240px;
+  flex: 0 0 280px;
   scroll-snap-align: start;
 }
 
-.hero-card {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.15s;
-}
-.hero-card:hover { transform: translateY(-2px); }
-
-.hero-card-img-wrap {
-  position: relative;
-  width: 240px;
-  height: 160px;
-  border-radius: 18px;
-  overflow: hidden;
-  background: #e8e0d4;
-}
 .hero-badge {
   position: absolute;
-  top: 8px;
+  top: 10px;
   left: 10px;
-  background: var(--yellow);
-  color: #222;
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 3px 9px;
-  border-radius: 9999px;
-  letter-spacing: 0.04em;
+  background: #fff;
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
   z-index: 1;
-}
-.hero-card-body {
-  padding: 8px 2px 2px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
-/* ── Ripe Now news tile ── */
+/* ── Ripe Now news tile — matches card size ── */
 .ripe-now-card {
-  width: 240px;
-  height: 160px;
-  border-radius: 18px;
+  width: 100%;
+  aspect-ratio: 20 / 19;
+  border-radius: var(--card-radius);
   background: linear-gradient(135deg, #f0fdf4, #ecfccb);
-  border: 1.5px solid #bbf7d0;
-  padding: 14px 16px;
+  border: 1px solid #d1fae5;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 .ripe-now-title {
-  font-size: 0.82rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--green-dark);
-  margin-bottom: 8px;
+  color: #166534;
+  margin-bottom: 12px;
 }
 .ripe-now-list {
   list-style: none;
@@ -401,36 +359,36 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 6px;
   overflow: hidden;
 }
 .ripe-now-list li {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.72rem;
+  gap: 8px;
+  font-size: 0.8125rem;
 }
-.ripe-name { font-weight: 600; color: #111; }
-.ripe-note { color: #6b7280; margin-left: auto; font-size: 0.65rem; }
+.ripe-name { font-weight: 600; color: var(--foreground); }
+.ripe-note { color: var(--gray-text); margin-left: auto; font-size: 0.75rem; }
 
 /* ── Auth ── */
 .sign-in-btn {
-  padding: 7px 16px;
+  padding: 8px 16px;
   border-radius: 9999px;
-  border: 1.5px solid #c4b89a;
+  border: 1px solid var(--gray-border);
   background: #fff;
-  font-size: 0.82rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: #333;
+  color: var(--foreground);
   cursor: pointer;
   white-space: nowrap;
 }
-.sign-in-btn:hover { background: #f5f0e8; }
+.sign-in-btn:hover { background: var(--gray-light); }
 
 .auth-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0,0,0,0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -438,8 +396,8 @@ body {
 }
 .auth-modal {
   background: #fff;
-  border-radius: 20px;
-  padding: 36px 32px 32px;
+  border-radius: var(--card-radius);
+  padding: 32px;
   width: min(420px, 92vw);
   position: relative;
   display: flex;
@@ -448,30 +406,30 @@ body {
 }
 .auth-close {
   position: absolute;
-  top: 14px;
+  top: 16px;
   right: 16px;
   background: none;
   border: none;
   font-size: 1rem;
   cursor: pointer;
-  color: #888;
+  color: var(--gray-text);
 }
-.auth-title { font-size: 1.25rem; font-weight: 700; color: #111; margin: 0; }
-.auth-sub { font-size: 0.85rem; color: #6b7280; margin: 0; }
+.auth-title { font-size: 1.375rem; font-weight: 600; color: var(--foreground); margin: 0; }
+.auth-sub { font-size: 0.875rem; color: var(--gray-text); margin: 0; }
 .auth-btn {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 18px;
-  border-radius: 10px;
-  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  border: 1px solid var(--gray-border);
   background: #fff;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.15s;
 }
-.auth-btn:hover { background: #f9fafb; }
+.auth-btn:hover { background: var(--gray-light); }
 .auth-btn.facebook { border-color: #1877F2; color: #1877F2; }
 
 /* ── Avatar dropdown ── */
@@ -480,19 +438,19 @@ body {
   top: calc(100% + 8px);
   right: 0;
   background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-  padding: 10px 0;
-  min-width: 180px;
+  border: 1px solid var(--gray-border);
+  border-radius: var(--card-radius);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+  padding: 8px 0;
+  min-width: 200px;
   z-index: 100;
 }
 .avatar-menu-email {
   font-size: 0.75rem;
-  color: #9ca3af;
-  padding: 0 14px 8px;
-  border-bottom: 1px solid #f3f4f6;
-  margin: 0 0 6px;
+  color: var(--gray-text);
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--gray-border);
+  margin: 0 0 4px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -501,25 +459,25 @@ body {
   display: block;
   width: 100%;
   text-align: left;
-  padding: 8px 14px;
+  padding: 10px 16px;
   background: none;
   border: none;
   font-size: 0.875rem;
   cursor: pointer;
-  color: #374151;
+  color: var(--foreground);
 }
-.avatar-menu button:hover { background: #f9fafb; }
+.avatar-menu button:hover { background: var(--gray-light); }
 
-/* ── Search Pill ── */
+/* ── Search Pill — Airbnb style ── */
 .search-pill-container {
   display: flex;
   justify-content: center;
-  padding: 12px 20px;
+  padding: 12px 24px;
   background: var(--bg);
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid #ede8df;
+  border-bottom: 1px solid var(--gray-border);
 }
 
 .search-pill {
@@ -527,12 +485,14 @@ body {
   align-items: center;
   background: #fff;
   border-radius: 9999px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
-  border: 1px solid #e5e7eb;
-  padding: 8px 10px 8px 24px;
-  max-width: 600px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid var(--gray-border);
+  padding: 6px 8px 6px 24px;
+  max-width: 560px;
   width: 100%;
+  transition: box-shadow 0.2s;
 }
+.search-pill:hover { box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.08); }
 
 .search-section {
   position: relative;
@@ -545,19 +505,20 @@ body {
   border-radius: 9999px;
   transition: background 0.15s;
 }
-.search-section:hover { background: #f3f4f6; }
-.search-section.disabled { opacity: 0.5; cursor: default; }
+.search-section:hover { background: var(--gray-light); }
+.search-section.disabled { opacity: 0.4; cursor: default; }
 .search-section.disabled:hover { background: transparent; }
 
 .search-label {
-  font-size: 0.7rem;
+  font-size: 0.6875rem;
   font-weight: 700;
-  color: #111;
-  letter-spacing: 0.04em;
+  color: var(--foreground);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 .search-value {
-  font-size: 0.85rem;
-  color: #6b7280;
+  font-size: 0.8125rem;
+  color: var(--gray-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -565,8 +526,8 @@ body {
 
 .search-divider {
   width: 1px;
-  height: 32px;
-  background: #e5e7eb;
+  height: 28px;
+  background: var(--gray-border);
   margin: 0 4px;
 }
 
@@ -575,20 +536,20 @@ body {
   top: calc(100% + 16px);
   left: 0;
   background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.12);
-  border: 1px solid #e5e7eb;
+  border-radius: var(--card-radius);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  border: 1px solid var(--gray-border);
   min-width: 240px;
-  padding: 16px 0;
+  padding: 8px 0;
   z-index: 200;
 }
 .search-option {
-  padding: 12px 24px;
-  font-size: 0.95rem;
-  color: #374151;
+  padding: 12px 20px;
+  font-size: 0.875rem;
+  color: var(--foreground);
   cursor: pointer;
 }
-.search-option:hover { background: #f3f4f6; color: #111; }
+.search-option:hover { background: var(--gray-light); }
 
 .search-submit {
   display: flex;
@@ -597,19 +558,19 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--yellow);
+  background: var(--accent);
   border: none;
   cursor: pointer;
   flex-shrink: 0;
   margin-left: 8px;
-  transition: transform 0.1s;
+  transition: transform 0.1s, background 0.15s;
 }
-.search-submit:hover { transform: scale(1.05); }
+.search-submit:hover { transform: scale(1.04); background: #e0314f; }
 
 @media (max-width: 767px) {
-  .search-pill { padding: 6px 6px 6px 16px; }
+  .search-pill { padding: 4px 6px 4px 16px; }
   .search-section { padding: 2px 8px; }
-  .search-label { font-size: 0.65rem; }
+  .search-label { font-size: 0.625rem; }
   .search-value { font-size: 0.75rem; }
   .search-submit { width: 40px; height: 40px; }
 }

@@ -25,7 +25,9 @@ export default function UserAvatar() {
   if (!user) {
     return (
       <>
-        <button className="sign-in-btn" onClick={() => setShowModal(true)}>Sign In</button>
+        <button className="header-avatar pig-avatar" onClick={() => setShowModal(true)} aria-label="Sign in">
+          <span className="pig-emoji">🐖</span>
+        </button>
         {showModal && <AuthModal onClose={() => setShowModal(false)} />}
       </>
     )
@@ -33,18 +35,11 @@ export default function UserAvatar() {
 
   return (
     <div style={{ position: 'relative' }}>
-      <button
-        className="header-avatar"
-        aria-label="User menu"
-        onClick={() => setMenuOpen((v) => !v)}
-        style={{ padding: 0, border: '2px solid #c4b89a', overflow: 'hidden', cursor: 'pointer', background: '#d1c9b8' }}
-      >
+      <button className="header-avatar" aria-label="User menu" onClick={() => setMenuOpen((v) => !v)}>
         {avatarUrl ? (
-          <Image src={avatarUrl} alt="Profile" width={36} height={36} style={{ objectFit: 'cover' }} unoptimized />
+          <Image src={avatarUrl} alt="Profile" width={36} height={36} style={{ objectFit: 'cover', borderRadius: '50%' }} unoptimized />
         ) : (
-          <span style={{ fontSize: '1.1rem', lineHeight: '36px', display: 'block', textAlign: 'center' }}>
-            {user.email?.[0]?.toUpperCase() ?? '?'}
-          </span>
+          <span className="pig-emoji">🐖</span>
         )}
       </button>
       {menuOpen && (
