@@ -24,24 +24,24 @@ body {
   display: flex;
   align-items: center;
   padding: 0 24px;
-  height: 64px;
+  height: 96px;
   background: var(--bg);
   flex-shrink: 0;
   border-bottom: 1px solid var(--gray-border);
 }
 
-/* ── Logo — same height as avatar (36px) ── */
+/* ── Logo (2x size) ── */
 .farmday-logo {
   display: flex;
   align-items: center;
-  gap: 6px;
-  height: 36px;
+  gap: 12px;
+  height: 72px;
   font-weight: 700;
   color: var(--accent);
   line-height: 1;
 }
-.farmday-logo .logo-icon { font-size: 1.5rem; line-height: 36px; display: inline-flex; align-items: center; }
-.farmday-logo span { font-size: 1.25rem; line-height: 36px; display: inline-flex; align-items: center; }
+.farmday-logo .logo-icon { font-size: 3rem; line-height: 72px; display: inline-flex; align-items: center; }
+.farmday-logo span { font-size: 2.5rem; line-height: 72px; display: inline-flex; align-items: center; }
 
 /* ── Layout shell ── */
 .farmday-root {
