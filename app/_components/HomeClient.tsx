@@ -53,6 +53,7 @@ export default function HomeClient() {
       </header>
       <div className="desktop-only">
         <SearchBar onFilterChange={(f) => setFilters(f as ActivityType[])} />
+      </div>
       <header className="farmday-header mobile-only" style={{ position: 'absolute', top: 0, right: 0, background: 'transparent', padding: '18px', zIndex: 200, width: 'auto' }}>
         <div style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
           <div className="header-avatar" onClick={() => alert('Sign In coming soon!')} />
@@ -61,10 +62,11 @@ export default function HomeClient() {
           </button>
         </div>
       </header>
-      </div>
 
-      {/* Mobile header */}
-      <SearchBar onFilterChange={(f) => setFilters(f as ActivityType[])} />
+      {/* Mobile search */}
+      <div className="mobile-only">
+        <SearchBar onFilterChange={(f) => setFilters(f as ActivityType[])} />
+      </div>
 
       {/* Filters */}
       <div className="farmday-filters-bar desktop-hidden">
