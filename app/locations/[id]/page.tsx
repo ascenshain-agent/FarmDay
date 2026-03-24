@@ -20,13 +20,13 @@ export default async function LocationPage({ params }: { params: Promise<{ id: s
 
   return (
     <main className="max-w-2xl mx-auto p-4">
-      <Link href="/" className="text-sm text-green-700 hover:underline">← Back</Link>
+      <Link href="/" className="text-sm hover:underline" style={{ color: '#367C2B' }}>← Back</Link>
       <h1 className="text-2xl font-bold mt-3 mb-1">{loc.name}</h1>
       <p className="text-gray-500 text-sm mb-4">{loc.address}</p>
 
       <div className="flex flex-wrap gap-2 mb-4">
         {loc.activities.map((a) => (
-          <span key={a} className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">{a}</span>
+          <span key={a} className="text-xs px-2 py-1 rounded-full" style={{ background: '#FFF3C4', color: '#3B2507' }}>{a}</span>
         ))}
       </div>
 
@@ -36,7 +36,7 @@ export default async function LocationPage({ params }: { params: Promise<{ id: s
         {loc.contact_info.phone && <p>📞 {loc.contact_info.phone}</p>}
         {loc.contact_info.email && <p>✉️ {loc.contact_info.email}</p>}
         {loc.contact_info.website && (
-          <p>🌐 <a href={loc.contact_info.website} target="_blank" rel="noopener noreferrer" className="text-green-700 hover:underline">{loc.contact_info.website}</a></p>
+          <p>🌐 <a href={loc.contact_info.website} target="_blank" rel="noopener noreferrer" className="hover:underline" style={{ color: '#367C2B' }}>{loc.contact_info.website}</a></p>
         )}
       </section>
 
